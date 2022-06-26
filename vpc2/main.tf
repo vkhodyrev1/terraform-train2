@@ -3,8 +3,8 @@ resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
 
   tags = {
-    Name        = "cloudcasts-${var.infra_env}-vpc"
-    Project     = "cloudcasts.io"
+    Name        = "terraform-train2-${var.infra_env}-vpc"
+    Project     = "terraform-train2.io"
     Environment = var.infra_env
     ManagedBy   = "terraform"
   }
@@ -21,8 +21,8 @@ resource "aws_subnet" "public" {
   cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)
 
   tags = {
-    Name        = "cloudcasts-${var.infra_env}-public-subnet"
-    Project     = "cloudcasts.io"
+    Name        = "terraform-train2-${var.infra_env}-public-subnet"
+    Project     = "terraform-train2.io"
     Role        = "public"
     Environment = var.infra_env
     ManagedBy   = "terraform"
@@ -41,8 +41,8 @@ resource "aws_subnet" "private" {
   cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)
 
   tags = {
-    Name        = "cloudcasts-${var.infra_env}-private-subnet"
-    Project     = "cloudcasts.io"
+    Name        = "terraform-train2-${var.infra_env}-private-subnet"
+    Project     = "terraform-train2.io"
     Role        = "private"
     Environment = var.infra_env
     ManagedBy   = "terraform"
