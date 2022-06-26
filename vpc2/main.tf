@@ -1,36 +1,51 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
-module "vpc" {
-  source = "../../"
-
-  name = "simple-example"
-
-  cidr = "10.0.0.0/16"
-
-  azs             = ["eu-west-1a", "eu-west-1b", "euw1-az3"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-
-  enable_ipv6 = true
-
-  enable_nat_gateway = false
-  single_nat_gateway = true
-
-  enable_s3_endpoint       = true
-  enable_dynamodb_endpoint = true
-
-  public_subnet_tags = {
-    Name = "overridden-name-public"
-  }
+# Create a VPC for the region associated with the AZ
+resource "aws_vpc" "vpc" {
+  cidr_block = var.vpc_cidr
 
   tags = {
-    Owner       = "user"
-    Environment = "dev"
+    Name        = "cloudcasts-${var.infra_env}-vpc"
+    Project     = "cloudcasts.io"
+    Environment = var.infra_env
+    ManagedBy   = "terraform"
   }
+}
 
-  vpc_tags = {
-    Name = "vpc-name"
+# Create 1 public subnets for each AZ within the regional VPC
+resource "aws_subnet" "public" {
+  for_each = var.public_subnet_numbers
+
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = each.key
+
+  # 2,048 IP addresses each
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)
+
+  tags = {
+    Name        = "cloudcasts-${var.infra_env}-public-subnet"
+    Project     = "cloudcasts.io"
+    Role        = "public"
+    Environment = var.infra_env
+    ManagedBy   = "terraform"
+    Subnet      = "${each.key}-${each.value}"
+  }
+}
+
+# Create 1 private subnets for each AZ within the regional VPC
+resource "aws_subnet" "private" {
+  for_each = var.private_subnet_numbers
+
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = each.key
+
+  # 2,048 IP addresses each
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)
+
+  tags = {
+    Name        = "cloudcasts-${var.infra_env}-private-subnet"
+    Project     = "cloudcasts.io"
+    Role        = "private"
+    Environment = var.infra_env
+    ManagedBy   = "terraform"
+    Subnet      = "${each.key}-${each.value}"
   }
 }

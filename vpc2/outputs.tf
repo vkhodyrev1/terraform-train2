@@ -1,34 +1,30 @@
 # VPC
 output "vpc_id" {
   description = "The ID of the VPC"
-  value       = module.vpc.vpc_id
+  value       = aws_vpc.vpc.id
 }
 
 # CIDR blocks
 output "vpc_cidr_block" {
   description = "The CIDR block of the VPC"
-  value       = module.vpc.vpc_cidr_block
+  value       = aws_vpc.vpc.vpc_cidr_block
 }
 
 # Subnets
-output "private_subnets" {
-  description = "List of IDs of private subnets"
-  value       = module.vpc.private_subnets
+output "vpc_public_subnets" {
+  # Result is a map of subnet id to cidr block, e.g.
+  # { "subnet_1234" => "10.0.1.0/4", ...}
+  value = {
+    for subnet in aws_subnet.public :
+    subnet.id => subnet.cidr_block
+  }
 }
 
-output "public_subnets" {
-  description = "List of IDs of public subnets"
-  value       = module.vpc.public_subnets
-}
-
-# NAT gateways
-output "nat_public_ips" {
-  description = "List of public Elastic IPs created for AWS NAT Gateway"
-  value       = module.vpc.nat_public_ips
-}
-
-# AZs
-output "azs" {
-  description = "A list of availability zones spefified as argument to this module"
-  value       = module.vpc.azs
+output "vpc_private_subnets" {
+  # Result is a map of subnet id to cidr block, e.g.
+  # { "subnet_1234" => "10.0.1.0/4", ...}
+  value = {
+    for subnet in aws_subnet.private :
+    subnet.id => subnet.cidr_block
+  }
 }
