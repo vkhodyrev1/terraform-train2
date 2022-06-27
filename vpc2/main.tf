@@ -7,7 +7,7 @@ resource "aws_vpc" "vpc" {
     Project       = "terraform-train2.io"
     Environment   = var.infra_env
     ManagedBy     = "terraform"
-    var.tags_name = var.tags_value
+    var.tags_name = "${var.tags_value}"
   }
 }
 
