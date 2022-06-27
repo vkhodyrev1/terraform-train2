@@ -3,10 +3,11 @@ resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
 
   tags = {
-    Name        = "terraform-train2-${var.infra_env}-vpc"
-    Project     = "terraform-train2.io"
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
+    Name          = "terraform-train2-${var.infra_env}-vpc"
+    Project       = "terraform-train2.io"
+    Environment   = var.infra_env
+    ManagedBy     = "terraform"
+    var.tags_name = var.tags_value
   }
 }
 

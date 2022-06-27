@@ -31,4 +31,15 @@ variable "vpc_cidr" {
 variable "infra_env" {
   type        = string
   description = "infrastructure environment"
+  default     = "train2"
+}
+
+variable "tags_name" {
+  type        = string
+  description = "Add tag name"
+}
+
+variable "tags_value" {
+  type        = string
+  description = "Add tag value"
 }
