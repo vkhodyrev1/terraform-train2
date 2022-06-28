@@ -38,6 +38,7 @@ variable "tags_name" {
   type        = map(string)
   description = "Add tag name"
   default = {
-    "Name" = "terraform-train2-vpc"
+    "Name"        = "terraform-train2-vpc"
+    "Environment" = "train2"
   }
 }
