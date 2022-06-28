@@ -35,11 +35,9 @@ variable "infra_env" {
 }
 
 variable "tags_name" {
-  type        = string
+  type        = map(string)
   description = "Add tag name"
-}
-
-variable "tags_value" {
-  type        = string
-  description = "Add tag value"
+  default = {
+    "Name" = "terraform-train2-vpc"
+  }
 }

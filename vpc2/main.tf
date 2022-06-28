@@ -2,13 +2,10 @@
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
 
-  tags = {
-    # Project            = "terraform-train2.io"
-    # ManagedBy          = "terraform"
-    Name               = "terraform-train2-${var.infra_env}-vpc"
-    Environment        = var.infra_env
-    "${var.tags_name}" = "${var.tags_value}"
-  }
+  tags = merge(var.tags_name, {
+    Name        = "terraform-train2-${var.infra_env}-vpc"
+    Environment = var.infra_env
+  })
 }
 
 # Create 1 public subnets for each AZ within the regional VPC
@@ -21,15 +18,10 @@ resource "aws_subnet" "public" {
   # 2,048 IP addresses each
   cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)
 
-  tags = {
-    # Project     = "terraform-train2.io"
-    # Role        = "public"
-    # ManagedBy   = "terraform"
-    Name               = "terraform-train2-${var.infra_env}-public-subnet"
-    Environment        = var.infra_env
-    Subnet             = "${each.key}-${each.value}"
-    "${var.tags_name}" = "${var.tags_value}"
-  }
+  tags = merge(var.tags_name, {
+    Name        = "terraform-train2-${var.infra_env}-vpc"
+    Environment = var.infra_env
+  })
 }
 
 # Create 1 private subnets for each AZ within the regional VPC
@@ -42,13 +34,8 @@ resource "aws_subnet" "private" {
   # 2,048 IP addresses each
   cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)
 
-  tags = {
-    # Project     = "terraform-train2.io"
-    # Role        = "private"
-    # ManagedBy   = "terraform"
-    Name               = "terraform-train2-${var.infra_env}-private-subnet"
-    Environment        = var.infra_env
-    Subnet             = "${each.key}-${each.value}"
-    "${var.tags_name}" = "${var.tags_value}"
-  }
+  tags = merge(var.tags_name, {
+    Name        = "terraform-train2-${var.infra_env}-vpc"
+    Environment = var.infra_env
+  })
 }
