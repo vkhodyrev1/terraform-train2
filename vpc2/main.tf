@@ -39,3 +39,30 @@ resource "aws_subnet" "private" {
     Environment = var.infra_env
   })
 }
+
+resource "aws_network_acl" "main" {
+  vpc_id     = aws_vpc.vpc.id
+  subnet_ids = [for subnet in aws_subnet.private : subnet.id]
+
+  egress {
+    protocol   = -1
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = var.vpc_cidr
+    from_port  = 0
+    to_port    = 0
+  }
+
+  ingress {
+    protocol   = -1
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = var.vpc_cidr
+    from_port  = 0
+    to_port    = 0
+  }
+
+  tags = {
+    Name = "main"
+  }
+}
