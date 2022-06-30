@@ -40,7 +40,7 @@ resource "aws_subnet" "private" {
   })
 }
 
-resource "aws_network_acl" "main" {
+resource "aws_network_acl" "private" {
   vpc_id     = aws_vpc.vpc.id
   subnet_ids = [for subnet in aws_subnet.private : subnet.id]
 
@@ -63,6 +63,6 @@ resource "aws_network_acl" "main" {
   }
 
   tags = {
-    Name = "main"
+    Name = "private"
   }
 }
