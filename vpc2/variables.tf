@@ -42,3 +42,15 @@ variable "tags_name" {
     "Environment" = "train2"
   }
 }
+
+variable "aws_security_group_rules" {
+  type        = any
+  description = "security groups to assign to server"
+  default = {
+    type        = "egress"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
