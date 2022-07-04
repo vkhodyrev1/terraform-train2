@@ -8,7 +8,7 @@ resource "aws_security_group" "public" {
   vpc_id      = aws_vpc.vpc.id
 
   tags = merge(var.tags_name, {
-    Name        = "terraform-train2-${var.infra_env}-vpc"
+    Name        = "terraform-train2-${var.infra_env}-public-sg"
     Environment = var.infra_env
   })
 }
