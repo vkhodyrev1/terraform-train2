@@ -89,7 +89,8 @@ resource "aws_route_table" "all" {
     # gateway_id = aws_internet_gateway.example.id
   }
 
-  tags = {
-    Name = "all"
-  }
+  tags = merge(var.tags_name, {
+    Name        = "terraform-train2-${var.infra_env}-route-all"
+    Environment = var.infra_env
+  })
 }
