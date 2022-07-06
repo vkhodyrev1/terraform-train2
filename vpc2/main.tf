@@ -86,7 +86,7 @@ resource "aws_route_table" "private" {
 
   route {
     cidr_block = var.vpc_cidr
-    # gateway_id = aws_internet_gateway.example.id
+    gateway_id = aws_nat_gateway.ngw.id
   }
 
   tags = merge(var.tags_name, {
@@ -111,6 +111,15 @@ resource "aws_route_table" "public" {
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
+
+  tags = merge(var.tags_name, {
+    Name        = "terraform-train2-${var.infra_env}-igw"
+    Environment = var.infra_env
+  })
+}
+
+resource "aws_nat_gateway" "ngw" {
+  subnet_id = aws_subnet.public[element(keys(aws_subnet.public), 0)].id
 
   tags = merge(var.tags_name, {
     Name        = "terraform-train2-${var.infra_env}-igw"
